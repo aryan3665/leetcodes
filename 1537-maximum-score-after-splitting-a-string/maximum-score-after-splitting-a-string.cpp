@@ -1,31 +1,28 @@
 class Solution {
 public:
-    int maxScore(string s) {
-        int n = s.size();
-        int leftZeros = 0;
-        int rightOnes = 0;
-
-        // Count total number of ones in the string
-        for (char c : s) {
-            if (c == '1') {
-                rightOnes++;
-            }
+int leftz(string s,int i){
+    int c0=0;
+    for(int j=0;j<=i;j++){
+        if(s[j]=='0'){
+      c0++;
         }
-
-        int maxi = 0;
-
-        // Iterate through the string to calculate scores
-        for (int i = 0; i < n; i++) {
-            if (s[i] == '0') {
-                leftZeros++;
-            } else {
-                rightOnes--;
-            }
-
-            // Calculate the score (only if not at the last character)
-            if (i < n - 1) {
-                maxi = max(maxi, leftZeros + rightOnes);
-            }
+    }
+    return c0;
+}
+int right1( string s,int k,int n){
+    int c1=0;
+    for(int l=k+1;l<n;l++){
+        if(s[l]=='1'){
+            c1++;
+        }
+    }
+    return c1;
+}
+    int maxScore(string s) {
+        int n=s.size();
+        int maxi=-1;
+        for(int i=0;i<n-1;i++){
+            maxi=max(maxi,(leftz(s,i)+right1(s,i,n)));
         }
 
         return maxi;
