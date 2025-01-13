@@ -8,7 +8,8 @@ using namespace std;
 class Solution {
 
   public:
-    int maxArea(vector<int> &arr) {
+    int maxWater(vector<int> &arr) {
+        // code here
         // code here
         int start=0;
         int end=arr.size()-1;
@@ -28,7 +29,6 @@ class Solution {
     }
 };
 
-
 //{ Driver Code Starts.
 int main() {
     int t;
@@ -47,7 +47,7 @@ int main() {
         }
 
         Solution ob;
-        int res = ob.maxArea(arr);
+        int res = ob.maxWater(arr);
 
         cout << res << endl << "~" << endl;
     }
