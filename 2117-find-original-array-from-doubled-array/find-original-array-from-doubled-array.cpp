@@ -1,27 +1,21 @@
 class Solution {
 public:
     vector<int> findOriginalArray(vector<int>& changed) {
-       if (changed.size() % 2 != 0) return {}; // If the length is odd, return empty
+       if (changed.size() % 2 != 0) return {}; // If odd length, return empty
 
-    sort(changed.begin(), changed.end()); // Sort the array
-    unordered_map<int, int> freq; // Frequency map
+    sort(changed.begin(), changed.end()); // Step 1: Sort the array
+    queue<int> q; // Queue to track elements needing a pair
     vector<int> original;
 
-    // Count the frequency of each element
     for (int num : changed) {
-        freq[num]++;
+        if (!q.empty() && q.front() * 2 == num) {
+            q.pop(); // Found a pair, remove from queue
+        } else {
+            q.push(num); // Push element needing a pair
+            original.push_back(num);
+        }
     }
 
-    // Process each element
-    for (int num : changed) {
-        if (freq[num] == 0) continue; // Skip if already used
-        if (freq[num * 2] == 0) return {}; // If double not found, return empty
-
-        original.push_back(num);
-        freq[num]--;      // Decrease frequency of the number
-        freq[num * 2]--;  // Decrease frequency of its double
-    }
-
-    return original;
-    }
+    return q.empty() ? original : vector<int>{}; // If pairs are complete, return original
+}
 };
