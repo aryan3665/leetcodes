@@ -2,23 +2,19 @@ class Solution {
 public:
     int minimumRecolors(string blocks, int k) {
         int n = blocks.size();
-        int op = INT_MAX; 
+        int op = INT_MAX;  // Initialize to a large value
         int c = 0;
 
-        
-        for (int i = 0; i < k; i++) {
-            if (blocks[i] == 'W') {
-                c++;
+        for (int i = 0; i <= n - k; i++) {  // Ensure we check all k-length substrings
+            c = 0;  // Reset count for each new window
+
+            for (int j = i; j < i + k; j++) {  // Correct window iteration
+                if (blocks[j] == 'W') {
+                    c++;  // Count 'W' blocks in the window
+                }
             }
-        }
-        op = c;
 
-        // Sliding Window: Move the window one step at a time
-        for (int i = k; i < n; i++) {
-            if (blocks[i] == 'W') c++; 
-            if (blocks[i - k] == 'W') c--;
-
-            op = min(op, c); 
+            op = min(op, c);  // Update the minimum number of recolors
         }
 
         return op;
