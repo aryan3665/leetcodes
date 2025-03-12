@@ -1,8 +1,7 @@
 class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
-     int hash[256];  
-        memset(hash, -1, sizeof(hash));  // Initialize all values to -1
+    vector<int>hash(256,-1);  // Initialize all values to -1
 
         int l = 0, r = 0, maxl = 0;
         int n = s.size();
