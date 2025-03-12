@@ -7,8 +7,10 @@ public:
         int n = s.size();
 
         while (r < n) {
-            if (hash[s[r]] != -1) {  // If character already seen
-                l = max(l, hash[s[r]] + 1);  // Move left pointer forward
+           if(hash[s[r]]!=-1){
+                if(hash[s[r]]>=l){
+                    l=hash[s[r]]+1;
+                }
             }
 
             int len = r - l + 1;
