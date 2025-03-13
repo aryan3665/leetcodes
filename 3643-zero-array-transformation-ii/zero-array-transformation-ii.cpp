@@ -1,43 +1,51 @@
 class Solution {
 public:
-    bool check(int mid,vector<int>&nums, vector<vector<int>>& queries){
-        int n=nums.size();
-        vector<int>sum(n,0);
-        vector<int>pre(n+1,0);
+int n;
+int q;
+bool check(vector<int>&nums,vector<vector<int>>&queries,int k){
+    vector<int> diff(n,0);
+    for(int i=0;i<=k;i++){
+         int start = queries[i][0];
+            int end = queries[i][1];
+            int x = queries[i][2];
 
-        for(int i=0;i<mid;i++){
-            int l=queries[i][0];
-            int r=queries[i][1];
-            int val=queries[i][2];
-            pre[l]+=val;;
-            pre[r+1]-=val;
-        }
-        sum[0]=pre[0];
-        for(int i=1;i<n;i++){
-            sum[i]=sum[i-1]+pre[i];
-        }
-
-        for(int i=0;i<n;i++){
-            if(nums[i]>sum[i]){
-                return false;
+            diff[start] += x;
+            if (end + 1 < n) {
+                diff[end + 1] -= x;
             }
-        }
-        return true;
     }
+    int cumsum=0;
+    for(int i=0;i<n;i++){
+        cumsum+=diff[i];
+        diff[i]=cumsum;
+        if((nums[i]-diff[i])>0){
+            return false;
+        }
+    }
+    return true;
+}
     int minZeroArray(vector<int>& nums, vector<vector<int>>& queries) {
+        n=nums.size();
+        q=queries.size();
+        auto lambda=[](int x){
+            return x==0;
+        };
+        if(all_of(begin(nums),end(nums),lambda)==true){
+            return 0;
+        }
         int l=0;
-        int r=queries.size();
-        int ans=-1;
+        int r=q-1;
+        int k=-1;
         while(l<=r){
             int mid=l+(r-l)/2;
-            if(check(mid,nums,queries)){
-                ans=mid;
+            if(check(nums,queries,mid)==true){
+                k=mid+1;
                 r=mid-1;
             }
             else{
                 l=mid+1;
             }
         }
-        return ans;
+        return k;
     }
 };
