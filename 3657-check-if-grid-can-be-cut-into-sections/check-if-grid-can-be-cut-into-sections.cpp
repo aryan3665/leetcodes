@@ -1,30 +1,47 @@
 class Solution {
 public:
-    bool check(vector<vector<int>>& intervals) {
-        sort(intervals.begin(), intervals.end());
-        
-        int sections = 0;
-        int max_end = intervals[0][1];
-        
-        for (auto& interval : intervals) {
-            int start = interval[0], end = interval[1];
-            if (max_end <= start) {
-                sections++;
+
+vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        int n=intervals.size();
+        sort(intervals.begin(),intervals.end());
+        vector<vector<int>>result;
+        result.push_back(intervals[0]);
+
+        for(int i=1;i<n;i++){
+            if(intervals[i][0]<result.back()[1]){
+                result.back()[0]=min(result.back()[0],intervals[i][0]);
+                result.back()[1]=max(result.back()[1],intervals[i][1]);
+            }else{
+                result.push_back(intervals[i]);
             }
-            max_end = max(max_end, end);
         }
-        
-        return sections >= 2;
+        return result;
     }
-    
     bool checkValidCuts(int n, vector<vector<int>>& rectangles) {
-        vector<vector<int>> x_intervals, y_intervals;
-        
-        for (auto& rect : rectangles) {
-            x_intervals.push_back({rect[0], rect[2]});
-            y_intervals.push_back({rect[1], rect[3]});
-        }
-        
-        return check(x_intervals) || check(y_intervals);
+        vector<vector<int>>hor;
+         vector<vector<int>>ver;
+
+
+         for(auto &coord:rectangles)
+{
+    int x1=coord[0];
+    int x2=coord[2];
+    int y1=coord[1];
+    int y2=coord[3];
+  hor.push_back({x1,x2});
+  ver.push_back({y1,y2});
+
+}
+
+vector<vector<int>>result1=merge(hor);
+if(result1.size()>=3){
+    return true;
+}
+
+vector<vector<int>>result2=merge(ver);
+if(result2.size()>=3){
+    return true;
+}
+return false;
     }
 };
