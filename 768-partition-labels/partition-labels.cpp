@@ -1,7 +1,7 @@
 class Solution {
 public:
     vector<int> partitionLabels(string s) {
-        vector<int> v(26, 0);
+        vector<int> v(26, -1);
         
         // Store the last index of each character
         for (int i = 0; i < s.size(); i++) {
@@ -9,21 +9,17 @@ public:
         }
 
         vector<int> ans;
-        int i = 0, j = 0;
-        int n = s.size();
-        
-        while (j < n) {
-            int end = v[s[j] - 'a'];
-
- 
-            while (j <= end) {
-                end = max(end, v[s[j] - 'a']);
+        int n=s.size();
+        int i=0;
+        while(i<n){
+            int end=v[s[i]-'a'];
+            int j=i;
+            while(j<end){
+                end=max(end,v[s[j]-'a']);
                 j++;
             }
-
-            
-            ans.push_back(j - i);
-            i = j;
+            ans.push_back(j-i+1);
+            i=j+1;
         }
 
         return ans;
