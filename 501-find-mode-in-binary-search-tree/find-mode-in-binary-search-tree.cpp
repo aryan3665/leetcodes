@@ -1,6 +1,6 @@
 class Solution {
 public:
-    void traverse(TreeNode* root, map<int, int>& freq) {
+    void traverse(TreeNode* root, unordered_map<int, int>& freq) {
         if (!root) return;
         freq[root->val]++;
         traverse(root->left, freq);
@@ -8,7 +8,7 @@ public:
     }
 
     vector<int> findMode(TreeNode* root) {
-        map<int, int> freq;
+        unordered_map<int, int> freq;
         traverse(root, freq);
 
         int maxFreq = 0;
