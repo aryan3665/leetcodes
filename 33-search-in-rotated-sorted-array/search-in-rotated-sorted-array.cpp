@@ -1,19 +1,35 @@
 class Solution {
 public:
     int search(vector<int>& nums, int target) {
-        unordered_map<int, int> mp; 
-        int n = nums.size();
-
-       
-        for (int i = 0; i < n; i++) {
-            mp[nums[i]] = i; 
+      int n=nums.size();
+      int left=0;
+      int right=n-1;
+      int ans=-1;
+      while(left<=right){
+        int mid=left+(right-left)/2;
+        if(nums[mid]==target){
+          ans=mid;
+          return ans;
+            
         }
-
-        
-        if (mp.find(target) != mp.end()) {
-            return mp[target];  // Return the stored index
+        else if(nums[left]<=nums[mid]){
+            if(nums[left] <= target && target < nums[mid]){
+                right=mid-1;
+            }
+            else{
+                left=mid+1;
+            }
         }
+        else{
+             if (nums[mid] < target && target <= nums[right]) {
+                    left = mid + 1;   // Search in right half
+                } else {
+                    right = mid - 1;  // Search in left half
+                }
 
-        return -1;  // Target not found
-    }
+        }
+      }
+
+        return ans;
+      }
 };
