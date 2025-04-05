@@ -1,23 +1,29 @@
 class Solution {
 public:
-    int subsetXORSum(vector<int>& arr) {
-         int n = arr.size();
-    int totalSum = 0;
-
-    // Loop through all subsets (2^n subsets)
-    for (int i = 0; i < (1 << n); ++i) {
-        int xor_sum = 0;
-
-        // For each subset, pick elements where bit is set
-        for (int j = 0; j < n; ++j) {
-            if (i & (1 << j)) {
-                xor_sum ^= arr[j];
-            }
-        }
-
-        totalSum += xor_sum;
+void solve(vector<int>&nums,int i,vector<int>&currentsubset,vector<vector<int>>&subsets){
+    if(i==nums.size()){
+        subsets.push_back(currentsubset);
+        return;
     }
+    currentsubset.push_back(nums[i]);
+    solve(nums,i+1,currentsubset,subsets);
+    currentsubset.pop_back();
+    solve(nums,i+1,currentsubset,subsets);
 
-    return totalSum;
+}
+    int subsetXORSum(vector<int>&nums) {
+        vector<vector<int>>subsets;
+        vector<int>currsubset;
+        solve(nums,0,currsubset,subsets);
+
+        int result=0;
+        for(vector<int>&subset:subsets){
+            int Xor = 0;
+            for(int &num:subset){
+                Xor^=num;
+            }
+            result+=Xor;
+        }
+        return result ;
     }
 };
