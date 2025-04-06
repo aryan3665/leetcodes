@@ -11,22 +11,17 @@
  */
 class Solution {
 public:
-void inorder(TreeNode*root,vector<int>&v){
-    if(!root)return;
-
-    inorder(root->left,v);
-    v.push_back(root->val);
-    inorder(root->right,v);
+int solve(TreeNode*root,int low,int high){
+  if(!root)return 0;
+int sum=0;
+  if(root->val>=low&&root->val<=high){
+    sum+=root->val;
+  }
+ sum+= solve(root->left,low,high);
+  sum+=solve(root->right,low,high);
+  return sum;
 }
-    int rangeSumBST(TreeNode* root, int low, int high) {
-        int sum=0;
-        vector<int>v;
-        inorder(root,v);
-        for(int i=0;i<v.size();i++){
-            if(v[i]>=low&&v[i]<=high){
-                sum+=v[i];
-            }
-        }
-        return sum;
+    int rangeSumBST(TreeNode* root, int low, int high) {  return solve(root,low,high);
+       
     }
 };
