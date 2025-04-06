@@ -19,8 +19,7 @@ TreeNode*helper(vector<int>&nums,int start ,int end){
     TreeNode* root = new TreeNode(nums[mid]);
      root->left = helper(nums, start, 
                                       mid - 1);
-                                      
-    // Create right subtree
+
     root->right = helper(nums, mid + 1,
                                        end);
     return root;
