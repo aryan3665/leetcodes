@@ -1,33 +1,21 @@
 class Solution {
 public:
-    void solve(const vector<int>& arr, int idx, vector<int>& combs,
-               vector<vector<int>>& ans, int k) {
+    void solve(int start, int n, int k, vector<int>& combs, vector<vector<int>>& ans) {
         if (k == 0) {
             ans.push_back(combs);
             return;
         }
-        if (idx == arr.size()) {
-            return;
+        for (int i = start; i <= n; ++i) {
+            combs.push_back(i);
+            solve(i + 1, n, k - 1, combs, ans);
+            combs.pop_back();
         }
-
-        // Include current element
-        combs.push_back(arr[idx]);
-        solve(arr, idx + 1, combs, ans, k - 1);
-
-        // Exclude current element
-        combs.pop_back();
-        solve(arr, idx + 1, combs, ans, k);
     }
 
     vector<vector<int>> combine(int n, int k) {
         vector<vector<int>> ans;
         vector<int> combs;
-        vector<int> arr(n);
-        for (int i = 0; i < n; ++i) {
-            arr[i] = i + 1;
-        }
-
-        solve(arr, 0, combs, ans, k);
+        solve(1, n, k, combs, ans);
         return ans;
     }
 };
