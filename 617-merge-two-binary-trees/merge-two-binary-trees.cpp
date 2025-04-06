@@ -1,33 +1,16 @@
+static int x = []() {
+std::ios::sync_with_stdio(false);
+cin.tie(nullptr);
+return 0; }();
+
 class Solution {
 public:
-    TreeNode* solve(TreeNode* root1, TreeNode* root2) {
-        if (!root1 && !root2) return nullptr;
-        
-        int val = 0;
-        TreeNode* left1 = nullptr;
-        TreeNode* right1 = nullptr;
-        TreeNode* left2 = nullptr;
-        TreeNode* right2 = nullptr;
-        
-        if (root1) {
-            val += root1->val;
-            left1 = root1->left;
-            right1 = root1->right;
-        }
-        if (root2) {
-            val += root2->val;
-            left2 = root2->left;
-            right2 = root2->right;
-        }
-
-        TreeNode* node = new TreeNode(val);
-        node->left = solve(left1, left2);
-        node->right = solve(right1, right2);
-
-        return node;
-    }
-
-    TreeNode* mergeTrees(TreeNode* root1, TreeNode* root2) {
-        return solve(root1, root2);
+    TreeNode* mergeTrees(TreeNode* t1, TreeNode* t2) {
+        if(!t1) return t2;
+        if(!t2) return t1;
+        t1->val+=t2->val;
+        if(t2->left) t1->left = mergeTrees(t1->left,t2->left);
+        if(t2->right) t1->right = mergeTrees(t1->right,t2->right);
+        return t1;
     }
 };
