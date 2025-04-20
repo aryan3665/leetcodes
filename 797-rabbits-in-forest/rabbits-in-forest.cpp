@@ -1,10 +1,17 @@
 class Solution {
 public:
     int numRabbits(vector<int>& answers) {
-        int freq[1001]={0}, cnt=0;
-        for(int x: answers){
-            cnt+=(freq[x]++%(x+1)==0)*(x+1);
+        int ans=0;
+        unordered_map<int,int>mpp;
+        for(auto it:answers){
+            mpp[it]++;
         }
-        return cnt;
+        for(auto it:mpp){
+            int size=it.first+1;
+            int num=it.second/size;
+            if(it.second%size)num++;
+            ans+=(num*size);
+        }
+        return ans;
     }
 };
