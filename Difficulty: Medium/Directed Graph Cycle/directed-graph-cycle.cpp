@@ -1,27 +1,7 @@
 class Solution {
   public:
   //rohit bhaiya logic
-  bool dfsdetect(int node,vector<vector<int>>&adj,vector<bool>&visited,vector<bool>&path){
-   
-       visited[node]=1;
-       path[node]=1;
-   
-   for(int j=0;j<adj[node].size();j++){
-       
-       //if node is alredy present in path to cycle present hai
-       if(path[adj[node][j]]==1)return 1;
-       
-       else{
-       //if neighbour alredy visited hai to ignore karo
-       if(visited[adj[node][j]])continue;
-       
-       if(dfsdetect(adj[node][j],adj,visited,path))return 1;
-       }
-   }
-   
-   path[node]=0;
-   return 0;
-  }
+
     bool isCyclic(int V, vector<vector<int>> &edges) {
         // code here
         vector<vector<int>>adj(V);
@@ -30,13 +10,35 @@ class Solution {
             int v=edges[i][1];
             adj[u].push_back(v);
         }
-        vector<bool>path(V,0);
-        vector<bool>visited(V,0);
+        
+        vector<int>indegree(V,0);
         for(int i=0;i<V;i++){
-            if(!visited[i]){
-                if(dfsdetect(i,adj,visited,path))return 1;
+            for(int j=0;j<adj[i].size();j++){
+                indegree[adj[i][j]]++;
             }
         }
-        return 0;
+        
+        queue<int>q;
+        for(int i=0;i<V;i++){
+            if(indegree[i]==0){
+                q.push(i);
+            }
+        }
+        int c=0;
+        while(!q.empty()){
+            int node=q.front();
+            q.pop();
+            c++;
+            for(int i=0;i<adj[node].size();i++){
+                indegree[adj[node][i]]--;
+                if(!indegree[adj[node][i]]){
+                  q.push(adj[node][i]);
+              }
+            }
+        }
+        if(c==V)return false;
+        return true;
+      
+      
     }
 };
