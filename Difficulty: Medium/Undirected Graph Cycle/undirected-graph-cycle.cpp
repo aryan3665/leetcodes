@@ -1,17 +1,18 @@
 class Solution {
-public:
-    bool detect(int node, int parent, vector<vector<int>>& adj, vector<bool>& visited) {
-        visited[node] = true;
-        for (int neighbor : adj[node]) {
-            if (neighbor == parent) continue;
-            if (visited[neighbor]) return true;
-            if (detect(neighbor, node, adj, visited)) return true;
-        }
-        return false;
-    }
-
+  public:
+  bool dfs(int node,int parent,vector<vector<int>>& adj,vector<bool>&visited){
+   visited[node]=1;
+   for(int j=0;j<adj[node].size();j++){
+       if(adj[node][j]==parent)continue;
+       if(visited[adj[node][j]]==1)return true;
+       if(dfs(adj[node][j],node,adj,visited))return true;
+   }
+   return false;
+      
+  }
     bool isCycle(int V, vector<vector<int>>& edges) {
-        vector<vector<int>> adj(V);
+        // Code here
+         vector<vector<int>> adj(V);
         // Build the adjacency list
         for (auto& edge : edges) {
             int u = edge[0];
@@ -19,12 +20,11 @@ public:
             adj[u].push_back(v);
             adj[v].push_back(u); // Undirected graph
         }
-
-        vector<bool> visited(V, false);
-        // Check each component
-        for (int i = 0; i < V; ++i) {
-            if (!visited[i]) {
-                if (detect(i, -1, adj, visited)) return true;
+        
+        vector<bool>visited(V,0);
+        for(int i=0;i<V;i++){
+            if(!visited[i]){
+               if( dfs(i,-1,adj,visited))return true;
             }
         }
         return false;
