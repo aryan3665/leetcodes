@@ -1,7 +1,7 @@
 class Solution {
 public:
     int minSubArrayLen(int target, vector<int>& nums) {
-        int n = nums.size();
+      int n = nums.size();
         int i = 0, j = 0, sum = 0;
         int minl = INT_MAX;
 
@@ -18,5 +18,6 @@ public:
         }
 
         return (minl == INT_MAX) ? 0 : minl;
+
     }
 };
