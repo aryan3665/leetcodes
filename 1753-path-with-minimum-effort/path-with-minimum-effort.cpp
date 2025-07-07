@@ -22,8 +22,7 @@ public:
             int x = coord.first;
             int y = coord.second;
 
-            // Optimization: if already at the end cell
-            if (x == m - 1 && y == n - 1) return diff;
+           
 
             for (auto& dir : d) {
                 int x_ = x + dir[0];
