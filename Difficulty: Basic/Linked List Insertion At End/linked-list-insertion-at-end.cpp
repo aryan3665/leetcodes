@@ -12,19 +12,22 @@ class Solution {
   public:
     Node *insertAtEnd(Node *head, int x) {
         // Code here
-        if(head==NULL){
-            head=new Node(x);
-            return head;
-        }
-        else{
-            Node*temp=new Node(x);
-            Node*tail=head;
-            while(tail->next!=NULL){
-                tail=tail->next;
-            }
-            tail->next=temp;
-            temp->next=NULL;
-        }
-        return head;
+         Node* new_node = new Node(x);
+         if (head == nullptr) {
+        return new_node;
+    }
+     Node* last = head;
+
+    // Traverse till the last node
+    while (last->next != nullptr) {
+        last = last->next;
+    }
+
+    // Change the next pointer of the last node 
+    // to point to the new node
+    last->next = new_node;
+
+    // Return the head of the list
+    return head;
     }
 };
