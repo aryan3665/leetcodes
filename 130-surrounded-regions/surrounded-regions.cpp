@@ -1,70 +1,78 @@
 class Solution {
 public:
-    int r;
-    int c;
-    int row[4] = {-1, 1, 0, 0};
-    int col[4] = {0, 0, -1, 1};
-    bool valid(int i, int j) { return (i >= 0 && i < r && j >= 0 & j < c); }
-    void solve(vector<vector<char>>& board) {
+    int r, c;
+    int row[4] = {0, 0, -1, 1};
+    int col[4] = {-1, 1, 0, 0};
 
+    bool valid(int i, int j) {
+        return (i >= 0 && j >= 0 && i < r && j < c);
+    }
+
+    void solve(vector<vector<char>>& board) {
+        if (board.empty()) return;
+
+        queue<pair<int, int>> q;
         r = board.size();
         c = board[0].size();
-        queue<pair<int, int>> q;
-        for (int j = 0; j < c; j++) {
-            if (board[0][j] == 'O') {
-                q.push({0, j});
-                board[0][j] = 'T';
+
+        // First row
+        for (int i = 0; i < c; i++) {
+            if (board[0][i] == 'O') {
+                q.push({0, i});
+                board[0][i] = 'T';
             }
         }
 
-        // first coloumn
-        for (int j = 0; j < r; j++) {
-            if (board[j][0] == 'O') {
-                q.push({j, 0});
-                board[j][0] = 'T';
-            }
-        }
-        // last row
-
-        for (int j = 1; j < c; j++) {
-            if (board[r - 1][j] == 'O') {
-                q.push({r - 1, j});
-                board[r - 1][j] = 'T';
+        // First column
+        for (int i = 0; i < r; i++) {
+            if (board[i][0] == 'O') {
+                q.push({i, 0});
+                board[i][0] = 'T';
             }
         }
 
-        // last coloumn
-        for (int j = 1; j < r; j++) {
-            if (board[j][c - 1] == 'O') {
-                q.push({j, c - 1});
-                board[j][c - 1] = 'T';
+        // Last row
+        for (int i = 0; i < c; i++) {
+            if (board[r - 1][i] == 'O') {
+                q.push({r - 1, i});
+                board[r - 1][i] = 'T';
             }
         }
 
+        // Last column (fixed bug here)
+        for (int i = 0; i < r; i++) {
+            if (board[i][c - 1] == 'O') {
+                q.push({i, c - 1});
+                board[i][c - 1] = 'T';
+            }
+        }
+
+        // BFS
         while (!q.empty()) {
-            int new_i = q.front().first;
-            int new_j = q.front().second;
+            int x = q.front().first;
+            int y = q.front().second;
             q.pop();
 
             for (int k = 0; k < 4; k++) {
-                if (valid(new_i + row[k], new_j + col[k]) &&
-                    board[new_i + row[k]][new_j + col[k]] == 'O') {
-                    board[new_i + row[k]][new_j + col[k]] = 'T';
-                    q.push({new_i + row[k], new_j + col[k]});
+                int nx = x + row[k];
+                int ny = y + col[k];
+                if (valid(nx, ny) && board[nx][ny] == 'O') {
+                    board[nx][ny] = 'T';
+                    q.push({nx, ny});
                 }
             }
         }
-        for(int i=0;i<r;i++){
-             for(int j=0;j<c;j++){
-                 if(board[i][j]=='O'){
-                     board[i][j]='X';
-                 }
-                 else if(board[i][j]=='T'){
-                     board[i][j]='O';
-                 }
-             }
-         }
-         
-    }
 
+        // Final conversion
+        for (int i = 0; i < r; i++) {
+            for (int j = 0; j < c; j++) {
+                if (board[i][j] == 'O') {
+                    board[i][j] = 'X';
+                }
+                if (board[i][j] == 'T') {
+                    board[i][j] = 'O';
+                }
+            }
+        }
+    }
 };
