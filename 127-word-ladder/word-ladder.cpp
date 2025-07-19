@@ -1,51 +1,39 @@
-const auto _ = std::cin.tie(nullptr)->sync_with_stdio(false);
-
-#define LC_HACK
-#ifdef LC_HACK
-const auto __ = []() {
-    struct ___ {
-        static void _() { std::ofstream("display_runtime.txt") << 0 << '\n'; }
-    };
-    std::atexit(&___::_);
-    return 0;
-}();
-#endif
-
 class Solution {
 public:
-    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
-        // Queue to store the current word and its transformation length
-        queue<pair<string ,int>> q;
-        q.push({beginWord, 1});
-        
-        // Unordered set for fast word lookup
-        unordered_set<string> st(wordList.begin(), wordList.end());
-        
-        // Remove the start word to avoid revisiting
-        st.erase(beginWord);
+    int ladderLength(string start, string end, vector<string>& bank) {
+        unordered_set<string> bankst(bank.begin(), bank.end());
+        if (bankst.find(end) == bankst.end()) return 0;  // early exit
+
+        unordered_set<string> visited;
+        queue<string> q;
+        q.push(start);
+        visited.insert(start);
+        int l = 0;
 
         while (!q.empty()) {
-            string word = q.front().first;
-            int steps = q.front().second;
-            q.pop();
+            int n = q.size();
+            while (n--) {
+                string temp = q.front();
+                q.pop();
+                if (temp == end)
+                    return l + 1;  // fix here
 
-            // Check if we reached the end word
-            if (word == endWord) return steps;
+                for (char ch : "abcdefghijklmnopqrstuvwxyz") {
+                    for (int i = 0; i < temp.size(); i++) {
+                        string neighbour = temp;
+                        neighbour[i] = ch;
 
-            // Try all possible transformations
-            for (int i = 0; i < word.size(); i++) {
-                char original = word[i];
-                for (char ch = 'a'; ch <= 'z'; ch++) {
-                    word[i] = ch;
-                    if (st.find(word) != st.end()) {
-                        st.erase(word); // Remove to prevent revisiting
-                        q.push({word, steps + 1});
+                        if (bankst.find(neighbour) != bankst.end() &&
+                            visited.find(neighbour) == visited.end()) {
+                            visited.insert(neighbour);
+                            q.push(neighbour);
+                        }
                     }
                 }
-                word[i] = original; // Revert for next character
             }
+            l++;
         }
 
-        return 0; // No valid transformation found
+        return 0;
     }
 };
