@@ -9,7 +9,7 @@ public:
         if (diff.size() == 0) return true; // same strings
         if (diff.size() != 2) return false;
 
-        return s[diff[0]] == t[diff[1]] && s[diff[1]] == t[diff[0]];
+        return true;
     }
 
     void dfs(int node, unordered_map<int, vector<int>>& adj, vector<bool>& visited) {
