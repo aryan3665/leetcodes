@@ -6,10 +6,7 @@ public:
         for (int i = 0; i < s.size(); ++i) {
             if (s[i] != t[i]) diff.push_back(i);
         }
-        if (diff.size() == 0) return true; // same strings
-        if (diff.size() != 2) return false;
-
-        return true;
+      return diff.size()==2||diff.empty();
     }
 
     void dfs(int node, unordered_map<int, vector<int>>& adj, vector<bool>& visited) {
