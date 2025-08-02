@@ -1,17 +1,19 @@
 class Solution {
 public:
     int uniquePaths(int m, int n) {
-        int dp[100][100];
+  vector<int>prev(n,0);
 
         for (int i = 0; i < m; ++i) {
+            vector<int>temp(n,0);
             for (int j = 0; j < n; ++j) {
                 if (i == 0 || j == 0)
-                    dp[i][j] = 1;  // Only one path along top row or left column
+                    temp[j] = 1;  // Only one path along top row or left column
                 else
-                    dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+                   temp[j] = prev[j] +temp[j - 1];
             }
+            prev=temp;
         }
 
-        return dp[m - 1][n - 1];
+        return prev[n-1];
     }
 };
