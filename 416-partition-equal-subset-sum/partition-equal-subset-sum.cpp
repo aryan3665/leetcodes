@@ -1,39 +1,48 @@
 class Solution {
 public:
-    bool canPartition(vector<int>& nums) {
-        int sum = 0;
+    bool solve(vector<int>& nums, int sum) {
         int n = nums.size();
+        bool dp[n][sum + 1];
 
-        for (auto x : nums) {
-            sum += x;
+        // Initialize all values to false
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j <= sum; j++) {
+                dp[i][j] = false;
+            }
         }
 
-        // If sum is odd, it can't be partitioned into two equal subsets
-        if (sum % 2 != 0) return false;
-
-        int s1 = sum / 2;
-        vector<vector<bool>> dp(n, vector<bool>(s1 + 1, false));
-
-        // Base case: sum = 0 is always possible
+        // Base case: sum 0 is always possible (empty subset)
         for (int i = 0; i < n; i++) {
             dp[i][0] = true;
         }
 
-        // Base case: first element
-        if (nums[0] <= s1)
+        // Base case: first element can make sum nums[0] if it's <= sum
+        if (nums[0] <= sum) {
             dp[0][nums[0]] = true;
+        }
 
         for (int i = 1; i < n; i++) {
-            for (int j = 1; j <= s1; j++) {
-                bool nt = dp[i - 1][j]; // not take
-                bool t = false;
+            for (int j = 1; j <= sum; j++) {
+                bool notPick = dp[i - 1][j];
+                bool pick = false;
                 if (j >= nums[i]) {
-                    t = dp[i - 1][j - nums[i]]; // take
+                    pick = dp[i - 1][j - nums[i]];
                 }
-                dp[i][j] = nt || t;
+                dp[i][j] = notPick || pick;
             }
         }
 
-        return dp[n - 1][s1];
+        return dp[n - 1][sum];
+    }
+    bool canPartition(vector<int>& nums) {
+        int sum = 0;
+        for (auto it : nums) {
+            sum += it;
+        }
+        if (sum % 2 != 0)
+            return false;
+        int n = nums.size();
+
+        return solve(nums, sum / 2);
     }
 };
