@@ -6,52 +6,37 @@
  *     TreeNode *right;
  *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
  *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left),
+ * right(right) {}
  * };
  */
 class Solution {
 public:
-    int find(vector<int>& inorder, int target, int start, int end) {
-        for (int i = start; i <= end; i++) {
-            if (inorder[i] == target) {
-                return i;
+    TreeNode* fun(vector<int>& preorder, vector<int>& inorder, int start,int end, int& idx){
+
+        if(start>end)return NULL;
+
+
+        TreeNode*root=new TreeNode(preorder[idx]);
+        int pos=start;
+        for(;pos<=end;pos++){
+            if(inorder[pos]==root->val){
+                break;
             }
         }
-        return -1; // Target not found
-    }
-
-    TreeNode* tree(vector<int>& inorder, vector<int>& preorder, int instart, int inend, int index) {
-        if (instart > inend) {
-            return NULL; // Base case
-        }
-
-        // Check if index is valid
-        if (index < 0 || index >= preorder.size()) {
-            return NULL; // Handle out-of-bounds access
-        }
-
-        TreeNode* root = new TreeNode(preorder[index]);
-        int pos = find(inorder, preorder[index], instart, inend);
-
-        // Check if position is valid
-        if (pos == -1) {
-            // Handle error: target not found in inorder
-            return NULL; // or throw an exception
-        }
-
-        root->left = tree(inorder, preorder, instart, pos - 1, index + 1);
-        root->right = tree(inorder, preorder, pos + 1, inend, index + (pos - instart + 1));
+        idx++;
+        root->left=fun(preorder,inorder,start,pos-1,idx);
+        root->right=fun(preorder,inorder,pos+1,end,idx);
 
         return root;
-    }
 
-    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
-        // Check if the input vectors are empty
-        if (preorder.empty() || inorder.empty()) {
-            return NULL; // Return NULL for empty input
-        }
+    }
         
+        TreeNode* buildTree(vector<int>& preorder,
+                                                         vector<int>& inorder) {
         int n = preorder.size();
-        return tree(inorder, preorder, 0, n - 1, 0);
+        int idx = 0; // to traverse in preorder to make root;
+        return fun(preorder, inorder, 0, n - 1,
+                   idx); // 0 and n-1 are start and end index of inorder
     }
 };
