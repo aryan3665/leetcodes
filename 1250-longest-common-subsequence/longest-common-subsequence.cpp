@@ -37,15 +37,6 @@ public:
             }
         }
 
-       int max_val = INT_MIN; // Initialize with smallest possible value
-for(int i = 0; i < dp.size(); i++) {
-    for(int j = 0; j < dp[0].size(); j++) {
-        if(dp[i][j] > max_val) {
-            max_val = dp[i][j];
-        }
-    }
-}
-
-return max_val;
+     return dp[0][0];
     }
 };
