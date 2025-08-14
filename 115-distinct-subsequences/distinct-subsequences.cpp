@@ -1,20 +1,24 @@
 class Solution {
 public:
-    vector<unsigned int> dp;
-    int numDistinct(string s, string t) {
-        int m = s.length() , n = t.length();
-        dp.assign(n+1,0);
-        //dp
-        for(int i=1;i<=m;i++){
-            int pre = 1;
-            for(int j=1;j<=n;j++){
-                int tmp = dp[j];
-                if(s[i-1] == t[j-1]){
-                    dp[j] += pre;
-                }
-                pre = tmp;
-            }
+    int dp[1001][1001]; // DP table
+
+    int solve(string &s, string &tgt, int i, int j) {
+        // base cases
+        if (j == tgt.size()) return 1; // matched whole target
+        if (i == s.size()) return 0;   // s ended, but target not matched
+
+        if (dp[i][j] != -1) return dp[i][j];
+
+        if (s[i] == tgt[j]) {
+            // include + exclude
+            return dp[i][j] = solve(s, tgt, i + 1, j + 1) + solve(s, tgt, i + 1, j);
         }
-        return dp[n];
+        // skip current char in s
+        return dp[i][j] = solve(s, tgt, i + 1, j);
+    }
+
+    int numDistinct(string s, string t) {
+        memset(dp, -1, sizeof(dp));
+        return solve(s, t, 0, 0);
     }
 };
