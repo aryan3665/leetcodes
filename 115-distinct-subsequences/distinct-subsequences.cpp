@@ -1,24 +1,26 @@
 class Solution {
 public:
-    int dp[1001][1001]; // DP table
-
-    int solve(string &s, string &tgt, int i, int j) {
-        // base cases
-        if (j == tgt.size()) return 1; // matched whole target
-        if (i == s.size()) return 0;   // s ended, but target not matched
-
-        if (dp[i][j] != -1) return dp[i][j];
-
-        if (s[i] == tgt[j]) {
-            // include + exclude
-            return dp[i][j] = solve(s, tgt, i + 1, j + 1) + solve(s, tgt, i + 1, j);
-        }
-        // skip current char in s
-        return dp[i][j] = solve(s, tgt, i + 1, j);
-    }
-
     int numDistinct(string s, string t) {
-        memset(dp, -1, sizeof(dp));
-        return solve(s, t, 0, 0);
+        int n = s.size(), m = t.size();
+        vector<vector<unsigned long long>> dp(n + 1, vector<unsigned long long>(m + 1, 0));
+
+        // Base case: empty target (t is fully matched)
+        for (int i = 0; i <= n; i++) {
+            dp[i][m] = 1;
+        }
+
+        // Fill DP table from bottom-up
+        for (int i = n - 1; i >= 0; i--) {
+            for (int j = m - 1; j >= 0; j--) {
+                if (s[i] == t[j]) {
+                    dp[i][j] = dp[i + 1][j + 1] + dp[i + 1][j];
+                } else {
+                    dp[i][j] = dp[i + 1][j];
+                }
+            }
+        }
+
+        // Since problem expects int, return min(dp[0][0], INT_MAX)
+        return (dp[0][0] > INT_MAX) ? INT_MAX : (int)dp[0][0];
     }
 };
