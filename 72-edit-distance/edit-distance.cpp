@@ -7,6 +7,7 @@ int solve(string &word1, string &word2,int i,int j){
     if(dp[i][j]!=-1)return dp[i][j];
     if(word1[i]==word2[j])return solve(word1,word2,i-1,j-1);
     else{
+        //if the string char not matching then we are trying out all the  ways to perform the operation and taking out the minimum of all the operations
         int inserted=1+solve(word1,word2,i,j-1);
         int deleted=1+solve(word1,word2,i-1,j);
         int replace=1+solve(word1,word2,i-1,j-1);
