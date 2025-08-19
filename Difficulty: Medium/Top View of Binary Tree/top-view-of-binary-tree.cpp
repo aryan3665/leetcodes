@@ -6,56 +6,45 @@ struct Node
     Node* right;
 };
 */
+
 class Solution {
   public:
     // Function to return a list of nodes visible from the top view
     // from left to right in Binary Tree.
-    void helper(Node*root,int pos,int &l,int &r){
-        if(root==NULL){
-            return;
-        }
-        l=min(l,pos);
-        r=max(r,pos);
-        
-        helper(root->left,pos-1,l,r);
-        helper(root->right,pos+1,l,r);
-    }
     vector<int> topView(Node *root) {
-        // code here
-        int l=0;//leftmost node positon
-        int r=0;//rightmost node position 
-        helper(root,0,l,r);//here 0 is position
-        vector<int>ans(r-l+1);
-        vector<bool>vis(r-l+1,0);
-        queue<Node*>q;
-        queue<int>index;
-        q.push(root);
-        index.push(-1*l);
-        while(!q.empty()){
-            Node*temp=q.front();
+        vector<int> ans;
+        if (!root) return ans;
+        
+        map<int, int> mp; // vertical -> node->data
+        queue<pair<Node*, int>> q; // node, vertical
+        
+        q.push({root, 0});
+        
+        while (!q.empty()) {
+            auto temp = q.front();
             q.pop();
-            int tempo =index.front();
-            index.pop();
             
+            Node* node = temp.first;
+            int vline = temp.second;
             
-            if(!vis[tempo]){
-                vis[tempo]=1;
-                ans[tempo]=temp->data;
+            // only insert if vertical line not already filled
+            if (mp.find(vline) == mp.end()) {
+                mp[vline] = node->data;
             }
             
-            if(temp->left){
-                q.push(temp->left);
-                index.push(tempo-1);
-                
+            if (node->left) {
+                q.push({node->left, vline - 1});
             }
-            
-            if(temp->right){
-                q.push(temp->right);
-                index.push(tempo+1);
+            if (node->right) {
+                q.push({node->right, vline + 1});
             }
         }
-        return ans;
         
+        // store map values in ans
+        for (auto it : mp) {
+            ans.push_back(it.second);
+        }
+        
+        return ans;
     }
 };
-
