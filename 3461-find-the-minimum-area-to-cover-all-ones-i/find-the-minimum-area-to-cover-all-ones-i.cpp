@@ -1,6 +1,11 @@
 class Solution {
 public:
     int minimumArea(vector<vector<int>>& grid) {
+         // iss problem ko solve karne ke liye jo meri approch hai ki hmm 4
+        // variable le lete hai start row start col and end row end col and
+        // start row me minimu row jaha se first 1 mila usko l=rakhenege same
+        // with start col and end row and end col me lasr one kaha mila hai usko
+        // rakhenege then area of rectangle aa jayega
         int n = grid.size();
         int m = grid[0].size();
         
