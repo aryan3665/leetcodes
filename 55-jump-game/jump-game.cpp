@@ -22,19 +22,17 @@ public:
     bool canJump(vector<int>& nums) {
         int n = nums.size();
         vector<int> dp(n, 0); // 0 = false, 1 = true
-        
-        dp[n - 1] = 1; // last index se khud tak pahunch sakte hain
-
-        for (int i = n - 2; i >= 0; i--) {
-            int farthest = min(n - 1, i + nums[i]); // i se maximum kahan tak jump kar sakte hain
-            for (int j = i + 1; j <= farthest; j++) {
-                if (dp[j] == 1) {
-                    dp[i] = 1;
+        dp[0]=1;
+        //dp[i]=1 we can reach there at i else cannot
+        for(int i=1;i<n;i++){
+            for(int j=i-1;j>=0;j--){
+                if(dp[j]==1&&j+nums[j]>=i){
+                    dp[i]=1;
                     break;
                 }
             }
         }
 
-        return dp[0] == 1;
+        return dp[n-1];
     }
 };
