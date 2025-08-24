@@ -1,23 +1,23 @@
 class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
-    vector<int>hash(256,-1);  // Initialize all values to -1
+        int i = 0;
+        unordered_map<char,int> mp;
+        int maxi = 0;
 
-        int l = 0, r = 0, maxl = 0;
-        int n = s.size();
+        for (int j = 0; j < s.size(); j++) {
+            mp[s[j]]++;
 
-        while (r < n) {
-           if(hash[s[r]]!=-1){
-                if(hash[s[r]]>=l){
-                    l=hash[s[r]]+1;
-                }
+            // shrink window until all characters are unique
+            while (mp[s[j]] > 1) {
+                mp[s[i]]--;
+                i++;
             }
 
-            int len = r - l + 1;
-            maxl = max(maxl, len);
-            hash[s[r]] = r;  // Update index of current character
-            r++;
+            // update answer (window size = j - i + 1)
+            maxi = max(maxi, j - i + 1);
         }
-        return maxl;
+
+        return maxi;
     }
 };
