@@ -1,20 +1,21 @@
 class Solution {
 public:
-int dp[501][501];
-int solve(vector<int>& satisfaction,int t,int i){
-    if(i>=satisfaction.size())return 0;
 
-    if(dp[i][t]!=-1)return dp[i][t];
-    //pick not_pick
-    int not_pic=0+solve(satisfaction,t,i+1);
-    int pick=(satisfaction[i]*t)+solve(satisfaction,t+1,i+1);
-
-    return dp[i][t]=max(pick,not_pic);
-
-}
     int maxSatisfaction(vector<int>& satisfaction) {
-        sort(satisfaction.begin(),satisfaction.end());
-        memset(dp,-1,sizeof(dp));
-        return solve(satisfaction,1,0);//time,index
+        sort(satisfaction.begin(), satisfaction.end());
+        int n = satisfaction.size();
+
+        // dp[i][time] = max satisfaction from index i with current "time"
+        vector<vector<int>> dp(n + 1, vector<int>(n + 2, 0));
+
+        for (int i = n - 1; i >= 0; i--) {
+            for (int time = n; time >= 1; time--) {
+                int not_pick = dp[i + 1][time];
+                int pick = satisfaction[i] * time + dp[i + 1][time + 1];
+                dp[i][time] = max(pick, not_pick);
+            }
+        }
+
+        return dp[0][1];  
     }
 };
