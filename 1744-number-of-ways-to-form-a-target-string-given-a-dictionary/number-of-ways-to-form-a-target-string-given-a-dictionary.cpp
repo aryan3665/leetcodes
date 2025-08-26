@@ -1,30 +1,13 @@
 class Solution {
 public:
-    int k, m;
     const int MOD = 1e9 + 7;
 
-    long long fun(vector<string>& words, string& target, int i, int j,  
-                  vector<vector<long long>>& freq, vector<vector<long long>>& dp) {
-        if (i == m) return 1;     // formed target
-        if (j == k) return 0;     // ran out of columns
-        
-        if (dp[i][j] != -1) return dp[i][j];
-
-        // Option 1: not pick column j
-        long long notpic = fun(words, target, i, j+1, freq, dp) % MOD;
-
-        // Option 2: pick from column j (if available chars)
-        long long pic = (freq[target[i]-'a'][j] * fun(words, target, i+1, j+1, freq, dp)) % MOD;
-
-        return dp[i][j] = (pic + notpic) % MOD;
-    }
-
     int numWays(vector<string>& words, string target) {
-        k = words[0].size();
+        int k = words[0].size();
         int n = words.size();
-        m = target.size();
+        int m = target.size();
 
-        // precompute frequency table with long long
+        // precompute frequency table
         vector<vector<long long>> freq(26, vector<long long>(k, 0));
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < k; j++) {
@@ -32,9 +15,25 @@ public:
             }
         }
 
-        // memo table also long long
-        vector<vector<long long>> dp(m+1, vector<long long>(k+1, -1));
+        // dp[i][j] = number of ways to form target[i:] using columns j..k-1
+        vector<vector<long long>> dp(m+1, vector<long long>(k+1, 0));
 
-        return (int) fun(words, target, 0, 0, freq, dp);
+        // base case: if we've matched whole target, 1 way
+        for (int j = 0; j <= k; j++) dp[m][j] = 1;
+
+        // fill dp from bottom-up
+        for (int i = m-1; i >= 0; i--) {
+            for (int j = k-1; j >= 0; j--) {
+                // option 1: not pick from column j
+                long long notpic = dp[i][j+1] % MOD;
+
+                // option 2: pick from column j (if matching char available)
+                long long pic = (freq[target[i]-'a'][j] * dp[i+1][j+1]) % MOD;
+
+                dp[i][j] = (pic + notpic) % MOD;
+            }
+        }
+
+        return (int) dp[0][0];
     }
 };
