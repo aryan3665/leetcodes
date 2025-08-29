@@ -14,34 +14,31 @@ public:
         return dp[i][sum]=take + notTake;
     }
 
-
     int count(vector<int>& coins, int sum) {
-        int n = coins.size();
+        int n=coins.size();
+        vector<vector<int>>t(n+1,vector<int>(sum+1));
+        for(int i=0;i<=n;i++){
+            t[i][0]=1;
+        }
+        //base case 2
+        for(int i=0;i<=sum;i++){
+            t[n][i]=0;
+        }
+        
+        for(int i=n-1;i>=0;i--){
+            for(int s=1;s<=sum;s++){
+                int notTake = t[i+1][s];
 
-        // dp[index][target] = number of ways
-        vector<vector<int>> dp(n + 1, vector<int>(sum + 1, 0));
-
-        // Base case: if target = 0 → 1 way (choose nothing)
-        for (int i = 0; i <= n; i++) {
-            dp[i][0] = 1;
+        // Take the current coin
+        int take=0;
+        if(s>=coins[i]){
+        take = t[i][s-coins[i]];
         }
 
-        for (int index = n - 1; index >= 0; index--) {
-            for (int s = 1; s <= sum; s++) {
-                // Don't take the current coin
-                int notTake = dp[index + 1][s];
-
-                // Take the current coin (unlimited use allowed → stay at index)
-                int take = 0;
-                if (s >= coins[index]) {
-                    take = dp[index][s - coins[index]];
-                }
-
-                dp[index][s] = take + notTake;
+      t[i][s]=take + notTake; 
             }
         }
-
-        return dp[0][sum];
+        
+        return t[0][sum];
     }
 };
-
