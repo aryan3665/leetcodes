@@ -22,6 +22,6 @@ public:
     int stockBuySell(vector<int> &arr) {
         int n = arr.size();
         vector<vector<int>> dp(n + 1, vector<int>(2, -1));
-        return f(0, 1, arr, dp); // start at index 0, allowed to buy
+        return f(0, 1, arr, dp); // start ayt index 0, allowed to bu
     }
 };
