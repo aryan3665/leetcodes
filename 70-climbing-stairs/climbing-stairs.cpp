@@ -1,25 +1,21 @@
 class Solution {
 public:
-//    int dp[46];
-// int f(int n){
-//     if(n<=1)return 1;
-//     if(dp[n]!=-1)return dp[n];
-
-//     int one=f(n-1);
-//     int two=f(n-2);
-//     return dp[n]=one+two;
-// }
     int climbStairs(int n) {
-int dp[46];
-dp[1]=1;
-dp[2]=2;
-for(int i=3;i<=n;i++){
- int one=dp[i-1];
-    int two=dp[i-2];
-   dp[i]=one+two;
-}
+       if(n<=1)return 1;
+       vector<int>dp(n+1);
+       dp[0]=1;
+       int n1=1;
+       int n2=1;
+       int n3;
+       dp[1]=1;
 
-return dp[n];
-     
+       for(int i=2;i<=n;i++){
+        dp[i]=dp[i-1]+dp[i-2];
+        n3=n2+n1;
+        n1=n2;
+        n2=n3;
+       }
+    //    return dp[n];
+       return n3;
     }
 };
