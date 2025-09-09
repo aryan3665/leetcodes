@@ -1,27 +1,28 @@
 class Solution {
 public:
-    bool dfs(int node, vector<vector<int>>& graph, vector<int>& color,
-             int currcolor) {
-        color[node] = currcolor;
-        for (int& v : graph[node]) {
-            if (color[v] == color[node])
-                return false;
-            if (color[v] == -1) {
-                int colorv = 1 - color[node];
-
-                if (dfs(v, graph, color, colorv) == false)
-                    return false;
-            }
-        }
-        return true;
-    }
     bool isBipartite(vector<vector<int>>& graph) {
-        vector<int> color(graph.size(), -1);
+        int n = graph.size();
+        vector<int> color(n, -1);  // -1 = uncolored, 0 and 1 are two colors
 
-        for (int i = 0; i < graph.size(); i++) {
-            if (color[i] == -1) {
-                if (dfs(i, graph, color, 1) == false)
-                    return false;
+        for (int start = 0; start < n; start++) {
+            if (color[start] != -1) continue; // already visited
+
+            queue<int> q;
+            q.push(start);
+            color[start] = 0;
+
+            while (!q.empty()) {
+                int node = q.front();
+                q.pop();
+
+                for (int nei : graph[node]) {
+                    if (color[nei] == -1) {
+                        color[nei] = !color[node];
+                        q.push(nei);
+                    } else if (color[nei] == color[node]) {
+                        return false; // conflict found
+                    }
+                }
             }
         }
         return true;
