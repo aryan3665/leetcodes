@@ -1,25 +1,36 @@
 class Solution {
   public:
-    // Function to return Breadth First Traversal of given graph.
+    // Function to perform BFS traversal from a given node
+    void bft(int node, vector<vector<int>> &adj, vector<bool> &visited, vector<int> &bfst) {
+        queue<int> q;
+        q.push(node);
+        visited[node] = true;
+
+        while (!q.empty()) {
+            int n = q.front();
+            q.pop();
+            bfst.push_back(n);
+
+            for (int i = 0; i < adj[n].size(); i++) {
+                int neighbor = adj[n][i];
+                if (!visited[neighbor]) {
+                    visited[neighbor] = true;   // ✅ Mark here itself
+                    q.push(neighbor);
+                }
+            }
+        }
+    }
+    
+    // Main BFS function for disconnected graph
     vector<int> bfs(vector<vector<int>> &adj) {
-        // Code here
-      queue<int>q;
-      q.push(0);
-      int v=adj.size();
-      vector<bool>visit(v,0);
-      vector<int>ans;
-      visit[0]=1;
-      while(!q.empty()){
-          int node=q.front();
-          q.pop();
-          ans.push_back(node);
-          for(int i=0;i<adj[node].size();i++){
-              if(!visit[adj[node][i]]){
-                  visit[adj[node][i]]=1;
-                  q.push(adj[node][i]);
-              }
-          }
-      }
-        return ans;
+        vector<int> bfst;  
+        vector<bool> visited(adj.size(), false);
+        
+        for (int i = 0; i < visited.size(); i++) {
+            if (!visited[i]) {
+                bft(i, adj, visited, bfst);
+            }
+        }
+        return bfst;
     }
 };
