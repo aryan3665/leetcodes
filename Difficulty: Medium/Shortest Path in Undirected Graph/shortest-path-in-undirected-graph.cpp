@@ -2,29 +2,31 @@ class Solution {
   public:
     // Function to find the shortest path from source to all other nodes
     vector<int> shortestPath(vector<vector<int>>& adj, int src) {
-        vector<int> ans(adj.size(),-1);
-        vector<bool> visit(adj.size(),false);
-        
-        queue<int>q;
-        q.push(src);
-        ans[src] = 0;
-        visit[src] = true;
-        int dist = 1;
+        // code here
+        queue<pair<int,int>>q;
+        q.push({src,0});
+        vector<bool>visited(adj.size(),0);
+        vector<int>dist(adj.size(),-1);
+        dist[src]=0;
+        visited[src]=1;
+        // int level=1;
         while(!q.empty()){
-            int size = q.size();
-            for(int i=0;i<size;i++){
-                int front = q.front();
-                q.pop();
-                for(int j =0;j<adj[front].size();j++){
-                    if(!visit[adj[front][j]]){
-                        ans[adj[front][j]] = dist;
-                        visit[adj[front][j]] = true;
-                        q.push(adj[front][j]);
-                    }
-                }
+            int n=q.size();
+            while(n--){
+                 int node=q.front().first;
+                 int d=q.front().second;
+                 q.pop();
+                 for(int j=0;j<adj[node].size();j++){
+                     if(!visited[adj[node][j]]){
+                         dist[adj[node][j]]=d+1;
+                         visited[adj[node][j]]=1;
+                         q.push({adj[node][j],dist[adj[node][j]]});
+                     }
+                 }
             }
-            dist++;
+            
+           
         }
-        return ans;
+        return dist;
     }
 };
