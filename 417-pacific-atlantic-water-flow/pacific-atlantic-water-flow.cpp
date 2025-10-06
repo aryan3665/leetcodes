@@ -1,52 +1,78 @@
+
+
+/*************************************************************** C++ ***************************************************************/
+//Approach - 1
+/*
+    Do a DFS on every cell and if a cell reaches both (pacific and atlantic), mark them as the result
+    TIme Complexity : (m*n)*(m*n)
+*/
+
+//Approach - 2 (Better DFS)
+//T.C : O(m*n)
+//S.C : O(m*n)
 class Solution {
 public:
-    vector<vector<int>> dir = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
-    typedef pair<int, int> pp;
-    vector<vector<bool>> bfs(vector<vector<int>>& heights, queue<pp>& q) {
-        int n = heights.size();
-        int m = heights[0].size();
-        vector<vector<bool>> visited(n, vector<bool> (m, 0));
-        while(q.size()) {
-            auto t = q.front();
-            q.pop();
-            int r = t.first;
-            int c = t.second;
-            visited[r][c] = 1;
-            for(int i = 0; i < 4; i++) {
-                int a = r + dir[i][0];
-                int b = c + dir[i][1];
-                if(a >= 0 && a < n && b >= 0 && b < m && visited[a][b] != 1 && heights[r][c] <= heights[a][b]) {
-                    q.push({a, b});
-                    visited[a][b] = 1;
-                }
-            }
+    vector<vector<int>> directions = {{1, 0}, {-1, 0}, {0, -1}, {0, 1}};
+
+    void DFS(vector<vector<int>>& heights, int i, int j, int prevCellVal, vector<vector<bool>>& visited) {
+        if(i < 0 || i >= heights.size() || j < 0 || j >= heights[0].size()) { //invalid cell
+            return;
         }
-        return visited;
+
+        if(heights[i][j] < prevCellVal || visited[i][j])
+            return;
+
+        visited[i][j] = true;
+        for(auto &dir : directions) {
+            int i_ = i + dir[0];
+            int j_ = j + dir[1];
+
+            DFS(heights, i_, j_, heights[i][j], visited);
+        }
+
     }
+
     vector<vector<int>> pacificAtlantic(vector<vector<int>>& heights) {
-        queue<pp> q1, q2;
-        int n = heights.size();
-        int m = heights[0].size();
-        for(int i = 0; i < n; i++) {
-            q1.push({i, 0});
-            q2.push({i, m - 1});
+        int m = heights.size(); //rows
+        int n = heights[0].size(); //cols
+
+        vector<vector<int>> result;
+
+        vector<vector<bool>> pacificVisited(m, vector<bool>(n, false)); //pacificVisited[i][j] = true, means [i][j] water can go to Pacific //m*n
+        vector<vector<bool>> atlanticVisited(m, vector<bool>(n, false)); //atlanticVisited[i][j] = true, means [i][j] water can go to atlantic //m*n
+        //T.C : O(m*n)
+        //S.C : O(m*n)
+
+
+        //Top Row and Bottom Row
+        //Top Row : Pacific connected already
+        //Bottom Row : atlantic connected already
+
+        for(int j = 0; j < n; j++) {
+            DFS(heights, 0, j, INT_MIN, pacificVisited); //Top Row
+            DFS(heights, m-1, j, INT_MIN, atlanticVisited); //Top Row
         }
-        for(int i = 1; i < m; i++) {
-            q1.push({0, i});
+
+        //First col and last column
+        //First col : Pacific connected already
+        //Last col : atlantic connected already
+        for(int i = 0; i < m; i++) {
+            DFS(heights, i, 0, INT_MIN, pacificVisited); //First column
+            DFS(heights, i, n-1, INT_MIN, atlanticVisited); //Last Column
         }
-        for(int i = 0; i < m - 1; i++) {
-            q2.push({n - 1, i});
-        }
-        vector<vector<bool>> v1 = bfs(heights, q1);
-        vector<vector<bool>> v2 = bfs(heights, q2);
-        vector<vector<int>> ans;
-        for(int i = 0 ; i < v1.size(); i++) {
-            for(int  j = 0; j < v1[0].size(); j++) {
-                if(v1[i][j] && v2[i][j]) {
-                    ans.push_back({i, j});
+
+
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                if(pacificVisited[i][j] && atlanticVisited[i][j]) {
+                    result.push_back({i, j});
                 }
             }
         }
-        return ans;
+
+        return result;
     }
 };
+
+
+
