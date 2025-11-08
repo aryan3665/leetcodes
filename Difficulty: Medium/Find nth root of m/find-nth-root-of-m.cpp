@@ -1,26 +1,21 @@
 class Solution {
-public:
-    // helper to compute mid^n safely (and stop if it exceeds m)
-    long long power(long long mid, int n, int m) {
-        long long ans = 1;
-        for (int i = 0; i < n; i++) {
-            ans *= mid;
-            if (ans > m) return ans;  // prevent overflow
-        }
-        return ans;
-    }
-
+  public:
     int nthRoot(int n, int m) {
-        int l = 1, r = m/n;  // search range
-
-        while (l <= r) {
-            int mid = l + (r - l) / 2;
-            long long val = power(mid, n, m);
-
-            if (val == m) return mid;      // found exact root
-            else if (val < m) l = mid + 1;
-            else r = mid - 1;
+        int low = 0, high = m;
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+            
+            long long result = 1;
+            for (int i = 0; i < n; i++) {
+                result *= mid;
+                if (result > m) break;  // avoid overflow
+            }
+            
+            if (result == m) return mid;
+            else if (result < m) low = mid + 1;
+            else high = mid - 1;
         }
-        return -1; // no integer root
+        return -1;
     }
 };
+
