@@ -1,32 +1,46 @@
 class Solution {
-    void dfs(int x, const vector<vector<int>> &con, vector<bool> &mark, int &a, int &b) {
-        if (mark[x]) {
-            return;
-        }
-        mark[x] = true;
-        ++a;
-        b += con[x].size();
-        for (int y : con[x]) {
-            dfs(y, con, mark, a, b);
+public:
+void dfs(int node,vector<vector<int>> &adj, vector<bool> &visited,int &v,int &e){
+    visited[node]=1;
+    v++;
+    e+=adj[node].size();
+    for(auto&neig:adj[node]){
+        if(!visited[neig]){
+            dfs(neig,adj,visited,v,e);
         }
     }
-    
-public:
+}
+
+bool iscomplete(int v,int e){
+    int k=(v*(v-1))/2;
+    return k==e;
+}
     int countCompleteComponents(int n, vector<vector<int>>& edges) {
-        vector<vector<int>> con(n);
-        for (const auto& e : edges) {
-            con[e[0]].push_back(e[1]);
-            con[e[1]].push_back(e[0]);
+
+        // dekho bhai complete graph usko bolte hain jisme v*(v-1)/2=edges hota
+        // hai and isi condition ko dekhenge hamm log yaha pe ok dfs ya bfs se
+        // travesal kartye hue hamm vertex and edges count karlenge and check kr
+        // lenge ki complete component hai ya nhi hi
+        vector<vector<int>> adj(n);
+        for (auto& edge : edges) {
+            int u = edge[0];
+            int v = edge[1];
+            adj[u].push_back(v);
+            adj[v].push_back(u);
         }
-        vector<bool> mark(n);
-        int r = 0;
-        for (int i = 0; i < n; ++i) {
-            if (!mark[i]) {
-                int x = 0, y = 0;
-                dfs(i, con, mark, x, y);
-                r += x * (x - 1) == y;
+        vector<bool> visited(n, 0);
+        int count = 0;
+
+        for (int i = 0; i < n; i++) {
+            if (!visited[i]) {
+                int v = 0;
+                int e = 0;
+                dfs(i, adj, visited, v, e);
+                if (iscomplete(v, e/2)) {
+                    count++;
+                }
             }
         }
-        return r;
+        return count;
     }
 };
