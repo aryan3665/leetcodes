@@ -1,5 +1,6 @@
 class Solution {
 public:
+//moores chacha algorithm 
     int majorityElement(vector<int>& nums) {
         int element=0;
         int cnt=0;
