@@ -1,18 +1,28 @@
 class Solution {
 public:
     int majorityElement(vector<int>& nums) {
-        int n = nums.size();
-        map<int, int> mp;
-
-        for (auto &it : nums) {
-            mp[it]++;
-        }
-
-        for (auto &p : mp) {
-            if (p.second > n / 2) {  // majority means strictly greater than n/2
-                return p.first;      // return the element itself
+        int element=0;
+        int cnt=0;
+        int n=nums.size();
+        for(int i=0;i<n;i++){
+            if(cnt==0){
+                element=nums[i];
+                cnt=1;
+            }
+            else  if(nums[i]==element){
+                cnt++;
+            }
+            else{
+                cnt--;
             }
         }
-        return -1;  // should not happen as per problem guarantee
+        cnt=0;
+        for(int i=0;i<n;i++){
+            if(nums[i]==element){
+                cnt++;
+            }
+        }
+        if(cnt>n/2)return element;
+        return -1;
     }
 };
