@@ -1,33 +1,37 @@
-/*Structure of the linked list node is as
-struct Node {
-  int data;
-  struct Node * next;
-  Node(int x) {
-    data = x;
-    next = NULL;
-  }
-}; */
+/*
+class Node {
+  public:
+    int data;
+    Node* next;
 
+    // Default constructor
+    Node() {
+        data = 0;
+        next = NULL;
+    }
+
+    // Parameterised Constructor
+    Node(int data) {
+        this->data = data;
+        this->next = NULL;
+    }
+};
+*/
 class Solution {
   public:
     Node *insertAtEnd(Node *head, int x) {
+        if(!head){
+            Node*head=new Node(x);
+            return head;
+        }
         // Code here
-         Node* new_node = new Node(x);
-         if (head == nullptr) {
-        return new_node;
-    }
-     Node* last = head;
-
-    // Traverse till the last node
-    while (last->next != nullptr) {
-        last = last->next;
-    }
-
-    // Change the next pointer of the last node 
-    // to point to the new node
-    last->next = new_node;
-
-    // Return the head of the list
-    return head;
+        Node*temp=head;
+        
+        while(temp->next!=NULL){
+            temp=temp->next;
+        }
+        temp->next=new Node(x);
+        return head;
+        
     }
 };
