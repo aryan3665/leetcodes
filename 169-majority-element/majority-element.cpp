@@ -1,29 +1,21 @@
 class Solution {
 public:
-//moores chacha algorithm 
     int majorityElement(vector<int>& nums) {
-        int element=0;
-        int cnt=0;
+        //brute force to simple hai bus map banake freq count kara hai o(n) space complexity me hoga
+
+
+        //moore algo
         int n=nums.size();
-        for(int i=0;i<n;i++){
-            if(cnt==0){
-                element=nums[i];
-                cnt=1;
-            }
-            else  if(nums[i]==element){
-                cnt++;
-            }
-            else{
-                cnt--;
+        int count=1;
+        int candidate=nums[0];
+        for(int i=1;i<n;i++){
+            if(nums[i]!=candidate)count--;
+            if(nums[i]==candidate)count++;
+             if(count==0){
+                candidate=nums[i];
+                count=1;
             }
         }
-        cnt=0;
-        for(int i=0;i<n;i++){
-            if(nums[i]==element){
-                cnt++;
-            }
-        }
-        if(cnt>n/2)return element;
-        return -1;
+        return candidate;
     }
 };
