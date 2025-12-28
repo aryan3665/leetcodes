@@ -1,35 +1,37 @@
 class Solution {
 public:
     int search(vector<int>& nums, int target) {
-      int n=nums.size();
-      int left=0;
-      int right=n-1;
-      int ans=-1;
-      while(left<=right){
-        int mid=left+(right-left)/2;
-        if(nums[mid]==target){
-          ans=mid;
-          return ans;
-            
-        }
-        else if(nums[left]<=nums[mid]){
-            if(nums[left] <= target && target < nums[mid]){
-                right=mid-1;
+       int result=-1;
+       int low=0;
+       int n=nums.size();
+       int high=n-1;
+       while(low<=high){
+        int mid=low+(high-low)/2;
+        if(nums[mid]==target)return mid;
+        //check kya left half sorted hai
+        if(nums[low]<=nums[mid]){
+            //check karo ki target uss sorted half me hai
+            if(nums[low]<=target&&target<=nums[mid]){
+                high=mid-1;
             }
             else{
-                left=mid+1;
+                low=mid+1;
             }
         }
+
         else{
-             if (nums[mid] < target && target <= nums[right]) {
-                    left = mid + 1;   // Search in right half
-                } else {
-                    right = mid - 1;  // Search in left half
-                }
+            //mATlab right half sorted hai ek half to sorted hoga hi 
 
+            //check karenge ki value kis part me hai 
+            if(nums[mid]<=target&&target<=nums[high]){
+                low=mid+1;
+            }
+            else{
+                high=mid-1;
+            }
         }
-      }
+       }
 
-        return ans;
-      }
+       return -1; 
+    }
 };
