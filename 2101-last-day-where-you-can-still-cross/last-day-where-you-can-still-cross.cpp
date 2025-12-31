@@ -23,6 +23,7 @@ bool dfs (vector<vector<int>>&grid,int i,int j){
 
 }
 bool canreach(vector<vector<int>>& cells,int mid){
+    //yaha 1st row ke allowed cell se dfs marenge and check ki last row me pahuch sakte hain ya nhi 
     vector<vector<int>>grid(ROW,vector<int>(COL));
     for(int i=0;i<=mid;i++){
         int x=cells[i][0]-1;
@@ -44,6 +45,7 @@ bool canreach(vector<vector<int>>& cells,int mid){
         int l=0;
         int r=cells.size();
         int lastday=0;
+        //binary search on given cells array
         while(l<=r){
             int mid=l+(r-l)/2;
             if(canreach(cells,mid)){
