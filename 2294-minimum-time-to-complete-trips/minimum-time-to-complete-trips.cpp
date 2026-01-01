@@ -1,26 +1,24 @@
 class Solution {
 public:
-    bool isanswer(vector<int>& time, int totalTrips, long long mid) {
-        long long sum = 0;
-        for (int i = 0; i < time.size(); i++) {
-            sum += mid / time[i];
-            if (sum >= totalTrips) return true; // early stop
-        }
-        return sum >= totalTrips;
-    }
-
     long long minimumTime(vector<int>& time, int totalTrips) {
-        long long l = 1;
-        long long r = (long long)*min_element(time.begin(), time.end()) * totalTrips;
-        long long ans = r;
+        long long low = 1;
+        long long high = (long long)*min_element(time.begin(), time.end()) * totalTrips;
+        long long ans = high;
 
-        while (l <= r) {
-            long long mid = l + (r - l) / 2;
-            if (isanswer(time, totalTrips, mid)) {
+        while (low <= high) {
+            long long mid = low + (high - low) / 2;
+            long long trips = 0;
+
+            for (int t : time) {
+                trips += mid / t;
+                if (trips >= totalTrips) break; // optimization
+            }
+
+            if (trips >= totalTrips) {
                 ans = mid;
-                r = mid - 1;
+                high = mid - 1;
             } else {
-                l = mid + 1;
+                low = mid + 1;
             }
         }
         return ans;
