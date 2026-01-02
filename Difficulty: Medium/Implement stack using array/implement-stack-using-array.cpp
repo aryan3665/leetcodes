@@ -1,43 +1,46 @@
 class myStack {
-public:
-    int top;
-    int k;
-    int* stack;
-
+  public:
+  int*arr;
+  int size;
+  int top;
     myStack(int n) {
-        k = n;
-        top = -1;
-        stack = new int[k];
+        // Define Data Structures
+        arr=new int[n];
+        size=n;
+        top=-1;
     }
 
     bool isEmpty() {
-        return top == -1;
+        // check if the stack is empty
+        return top==-1;
     }
 
     bool isFull() {
-        return top == k - 1;
+        // check if the stack is full
+       return  top==size-1;
     }
 
     void push(int x) {
-        if (!isFull()) {
-            stack[++top] = x;
+        // inserts x at the top of the stack
+        
+        if(!isFull()){
+        arr[++top]=x;
         }
     }
 
     void pop() {
-        if (!isEmpty()) {
+        // removes an element from the top of the stack
+        
+        if(!isEmpty()){
             top--;
         }
     }
 
     int peek() {
-        if (!isEmpty()) {
-            return stack[top];
+        // Returns the top element of the stack
+        if(!isEmpty()){
+            return arr[top];
         }
-        return -1; // or throw an exception
-    }
-
-    ~myStack() {
-        delete[] stack;
+        return -1;
     }
 };
