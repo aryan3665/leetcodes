@@ -6,13 +6,13 @@ stack<pair<int,int>>st;
     }
     
     int next(int price) {
-        int span=1;
-        while(!st.empty()&& st.top().first<=price){
-            span=span+st.top().second;
+        int sum=1;
+        while(!st.empty()&&st.top().first<=price){
+            sum+=st.top().second;
             st.pop();
         }
-        st.push({price,span});
-        return span;
+        st.push({price,sum});
+        return sum;
     }
 };
 
