@@ -1,28 +1,33 @@
 /*
-struct Node {
+class Node {
+  public:
     int data;
-    struct Node* next;
+    Node* next;
 
-    Node(int x) {
-        data = x;
-        next = nullptr;
+    // Default constructor
+    Node() {
+        data = 0;
+        next = NULL;
+    }
+
+    // Parameterised Constructor
+    Node(int data) {
+        this->data = data;
+        this->next = NULL;
     }
 };
 */
-/*
-    Print elements of a linked list on console
-    Head pointer input could be NULL as well for empty list
-*/
-
 class Solution {
   public:
-    // Function to display the elements of a linked list in same line
-    void printList(Node *head) {
-        // your code goes here
-        Node*curr=head;
-        while(curr){
-            cout<<curr->data<<" ";
-            curr=curr->next;
+    vector<int> printList(Node *head) {
+        // code here
+        vector<int>ans;
+        Node*temp;
+        temp=head;
+        while(temp){
+            ans.push_back(temp->data);
+            temp=temp->next;
         }
+        return ans;
     }
 };
