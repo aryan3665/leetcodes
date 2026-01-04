@@ -31,6 +31,7 @@ class Solution {
             temp=temp->next;
         }
         temp->next=new Node(x);
+        temp->next->next=NULL;
         return head;
         
     }
