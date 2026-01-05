@@ -7,10 +7,8 @@ public:
         int ans=n;
         while(start<=end){
             int mid=start+(end-start)/2;
-            if(nums[mid]==target){
-                return mid;
-            }
-            else if(nums[mid]>target){
+            
+             if(nums[mid]>=target){
                 ans=mid;
                 end=mid-1;
             }
