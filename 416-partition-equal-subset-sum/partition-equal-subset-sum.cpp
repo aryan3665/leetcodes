@@ -1,43 +1,39 @@
 class Solution {
 public:
-  bool solve(vector<int>& arr, int sum) {
-    int n = arr.size();
-    vector<bool> prev(sum + 1, false);
-    
-    // Base case: sum 0 is always possible
-    prev[0] = true;
-    
-    // Base case: first element
-    if (arr[0] <= sum) {
-        prev[arr[0]] = true;
-    }
-    
-    for (int i = 1; i < n; i++) {
-        vector<bool> curr(sum + 1, false);
-        curr[0] = true; // base case
-        
-        for (int j = 1; j <= sum; j++) {
-            bool notPick = prev[j];
-            bool pick = false;
-            if (j >= arr[i]) {
-                pick = prev[j - arr[i]];
-            }
-            curr[j] = notPick || pick;
-        }
-        prev = curr;
-    }
-    
-    return prev[sum];
-}
     bool canPartition(vector<int>& nums) {
         int sum = 0;
-        for (auto it : nums) {
-            sum += it;
-        }
-        if (sum % 2 != 0)
-            return false;
         int n = nums.size();
 
-        return solve(nums, sum / 2);
+        for (auto x : nums) {
+            sum += x;
+        }
+
+        // If sum is odd, it can't be partitioned into two equal subsets
+        if (sum % 2 != 0) return false;
+
+        int s1 = sum / 2;
+        vector<vector<bool>> dp(n, vector<bool>(s1 + 1, false));
+
+        // Base case: sum = 0 is always possible
+        for (int i = 0; i < n; i++) {
+            dp[i][0] = true;
+        }
+
+        // Base case: first element
+        if (nums[0] <= s1)
+            dp[0][nums[0]] = true;
+
+        for (int i = 1; i < n; i++) {
+            for (int j = 1; j <= s1; j++) {
+                bool nt = dp[i - 1][j]; // not take
+                bool t = false;
+                if (j >= nums[i]) {
+                    t = dp[i - 1][j - nums[i]]; // take
+                }
+                dp[i][j] = nt || t;
+            }
+        }
+
+        return dp[n - 1][s1];
     }
 };
