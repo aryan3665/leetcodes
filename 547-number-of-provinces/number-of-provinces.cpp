@@ -1,33 +1,49 @@
 class Solution {
 public:
+    void bfs(int start, unordered_map<int, vector<int>>& adj, vector<bool>& visited) {
+        queue<int> q;
 
-void dfs(int node,  vector<int>adj[],vector<bool>&visited){
-    visited[node]=true;
-    for(int&v:adj[node]){
-        if(!visited[v]){
-            dfs(v,adj,visited);
+        q.push(start);
+        visited[start] = true;
+
+        while (!q.empty()) {
+            int node = q.front();
+            q.pop();
+
+            for (int neigh : adj[node]) {
+                if (!visited[neigh]) {
+                    visited[neigh] = true;   // Mark while pushing
+                    q.push(neigh);           // Push into queue
+                }
+            }
         }
     }
-}
-    int findCircleNum(vector<vector<int>>& P) {
-        int n=P.size();
-        vector<int>adj[n];
-        for(int i=0;i<n;i++){
-            for(int j=0;j<P[0].size();j++){
-                if(P[i][j]==1){
+
+    int findCircleNum(vector<vector<int>>& isConnected) {
+        int n = isConnected.size();
+
+        unordered_map<int, vector<int>> adj;
+
+        // Build graph
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (isConnected[i][j] == 1) {
                     adj[i].push_back(j);
                     adj[j].push_back(i);
                 }
             }
         }
-        int count=0;
-        vector<bool>visited(n,0);
-        for(int i=0;i<n;i++){
-            if(!visited[i]){
-                dfs(i,adj,visited);
+
+        vector<bool> visited(n, false);
+        int count = 0;
+
+        for (int i = 0; i < n; i++) {
+            if (!visited[i]) {
+                bfs(i, adj, visited);
                 count++;
             }
         }
+
         return count;
     }
 };
