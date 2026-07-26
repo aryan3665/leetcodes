@@ -13,6 +13,7 @@ public:
         c = image[0].size();
 
         int startColor = image[sr][sc];
+        //same color me change karna hai 
         if (startColor == color) return image; 
 
         queue<pair<int, int>> q;
