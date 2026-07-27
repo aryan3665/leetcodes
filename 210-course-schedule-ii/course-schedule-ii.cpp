@@ -1,48 +1,38 @@
 class Solution {
 public:
-    bool dfs(int node, vector<vector<int>>& adj, vector<bool>& visited, vector<bool>& recStack, stack<int>& s) {
-        visited[node] = true;
-        recStack[node] = true;
-
-        for (auto& neighbour : adj[node]) {
-            if (!visited[neighbour]) {
-                if (dfs(neighbour, adj, visited, recStack, s)) {
-                    return true;  // Cycle found
-                }
-            } else if (recStack[neighbour]) {
-                return true;  // Cycle detected
-            }
-        }
-
-        recStack[node] = false;
-        s.push(node);
-        return false;
-    }
 
     vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
         vector<vector<int>> adj(numCourses);
+        vector<int>indegree(numCourses,0);
         for (auto& p : prerequisites) {
             adj[p[1]].push_back(p[0]);
+            indegree[p[0]]++;
         }
 
-        vector<bool> visited(numCourses, false);
-        vector<bool> recStack(numCourses, false);
-        stack<int> s;
+       queue<int>q;
+       for(int i=0;i<indegree.size();i++){
+        if(indegree[i]==0){
+            q.push(i);
+        }
+       }
 
-        for (int i = 0; i < numCourses; ++i) {
-            if (!visited[i]) {
-                if (dfs(i, adj, visited, recStack, s)) {
-                    return {};  // cycle detected
+       
+
+        vector<int> result;
+        while(!q.empty()){
+            int frnt=q.front();
+            q.pop();
+            result.push_back(frnt);
+            for(auto&it:adj[frnt]){
+                indegree[it]--;
+                if(indegree[it]==0){
+                    q.push(it);
                 }
             }
         }
 
-        vector<int> result;
-        while (!s.empty()) {
-            result.push_back(s.top());
-            s.pop();
-        }
-
+        if(result.size()!=numCourses)return {};
         return result;
+       
     }
 };
