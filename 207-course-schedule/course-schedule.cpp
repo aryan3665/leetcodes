@@ -2,21 +2,18 @@ class Solution {
 public:
     bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
         vector<vector<int>> adj(numCourses); 
-
+   vector<int> indegree(numCourses, 0);
         // Build adjacency list
         for (const auto& pre : prerequisites) {
             int u = pre[1]; // prerequisite course
             int v = pre[0]; // course that depends on u
             adj[u].push_back(v);
+            indegree[v]++;
         }
 
-        vector<int> indegree(numCourses, 0);
+     
         
-        for (int i = 0; i < numCourses; ++i) {
-            for (int j : adj[i]) {
-                indegree[j]++;
-            }
-        }
+      
 
         queue<int> q;
 
