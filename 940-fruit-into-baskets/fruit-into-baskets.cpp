@@ -1,31 +1,31 @@
 class Solution {
 public:
     int totalFruit(vector<int>& fruits) {
-        //classical slidng window
-        int i=0;
-        int j=0;
-        int maxi=INT_MIN;
-        map<int,int>mp;
-        while(j<fruits.size()){
-        mp[fruits[j]]++;
+        unordered_map<int, int> mp;
 
+        int l = 0;
+        int maxi = 0;
 
-while(mp.size()>2){
-     if(mp[fruits[i]]==0){
-        mp.erase(fruits[i]);
-    }
-    mp[fruits[i]]--;
-    if(mp[fruits[i]]==0){
-        mp.erase(fruits[i]);
-    }
-    i++;
-}
+        for (int h = 0; h < fruits.size(); h++) {
 
-        if(mp.size()<=2){
-            maxi=max(maxi,j-i+1);
-        }
+            // Add current fruit
+            mp[fruits[h]]++;
 
-        j++;
+            // More than 2 types → shrink window
+            while (mp.size() > 2) {
+                mp[fruits[l]]--;
+
+                if (mp[fruits[l]] == 0) {
+                    mp.erase(fruits[l]);
+                }
+
+                l++;
+            }
+
+            // Valid window
+            if (mp.size() <= 2) {
+                maxi = max(maxi, h - l + 1);
+            }
         }
 
         return maxi;
