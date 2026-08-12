@@ -1,23 +1,23 @@
 class Solution {
 public:
     int maxSubarrayLength(vector<int>& nums, int k) {
-        int i=0;
+        int i =0;
         int j=0;
-        int n=nums.size();
-        map<int,int>mp;
-        int result=INT_MIN;
-        while(j<n){
+        int maxi=INT_MIN;
+        unordered_map<int,int>mp;
+        while(j<nums.size()){
             mp[nums[j]]++;
-            while(i<j&&mp[nums[j]]>k){
+
+            //galat hone ki condition
+            while(mp[nums[j]]>k){
                 mp[nums[i]]--;
                 i++;
             }
-          
-                result=max(result,j-i+1);
-                j++;
-            
-            
+
+            maxi=max(maxi,j-i+1);
+            j++;
         }
-        return result;
+
+        return maxi;
     }
 };
