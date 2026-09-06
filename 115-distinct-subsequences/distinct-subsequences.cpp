@@ -1,35 +1,48 @@
-#include <iostream>
-#include <vector>
-#include <string>
-using namespace std;
+class Solution { 
+public: 
+    int f(string &s, string &t, int i, int j, int n, int m, 
+          vector<vector<int>> &dp) {
 
-class Solution {
-public:
+        // t complete ho gaya
+        if (j == m)
+            return 1;
+
+        // s complete ho gaya but t abhi baaki hai
+        if (i == n)
+            return 0;
+
+        // already calculated
+        if (dp[i][j] != -1)
+            return dp[i][j];
+
+        int yes = 0;
+        int no = 0;
+
+        // characters match
+        if (s[i] == t[j]) {
+
+            // s[i] ko le liya
+            yes = f(s, t, i + 1, j + 1, n, m, dp);
+
+            // s[i] ko nahi liya
+            no = f(s, t, i + 1, j, n, m, dp);
+        }
+        else {
+
+            // match nahi hua, so s[i] ko skip karo
+            no = f(s, t, i + 1, j, n, m, dp);
+        }
+
+        return dp[i][j] = yes + no;
+    }
+
     int numDistinct(string s, string t) {
-        int n = s.size(), m = t.size();
-        vector<vector<unsigned long long>> dp(n + 1, vector<unsigned long long>(m + 1, 0));
 
-        // Base Case 1: If `t` is empty, there's 1 way (delete all `s`)
-        for (int i = 0; i <= n; i++) {
-            dp[i][0] = 1;
-        }
+        int n = s.size();
+        int m = t.size();
 
-        // Base Case 2: If `s` is empty but `t` isn't → 0 ways
-        for (int j = 1; j <= m; j++) {
-            dp[0][j] = 0;
-        }
+        vector<vector<int>> dp(n, vector<int>(m, -1));
 
-        // Fill DP table
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= m; j++) {
-                if (s[i - 1] == t[j - 1]) {
-                    dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j];
-                } else {
-                    dp[i][j] = dp[i - 1][j];
-                }
-            }
-        }
-
-        return dp[n][m];
+        return f(s, t, 0, 0, n, m, dp);
     }
 };
