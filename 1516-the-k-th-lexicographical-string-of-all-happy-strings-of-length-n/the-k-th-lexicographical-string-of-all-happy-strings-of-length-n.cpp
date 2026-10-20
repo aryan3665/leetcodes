@@ -2,20 +2,24 @@
 class Solution {
 public:
     vector<string> ans;
+    vector<string> all = {"a", "b", "c"};
     string temp;
-    vector<char> all = {'a', 'b', 'c'};
-
+int p;
     void solve(int n) {
         // Base case
+
+        if(ans.size()==p)return;
         if (temp.size() == n) {
             ans.push_back(temp);
             return;
         }
 
-        for (char c : all) {
-            if (temp.empty() || temp.back() != c) {
-                temp.push_back(c);
+        for (int i = 0; i < 3; i++) {
+            if (temp.empty() || temp.back() != all[i][0]) {
+                temp.push_back(all[i][0]);
+
                 solve(n);
+
                 temp.pop_back();
             }
         }
@@ -24,6 +28,7 @@ public:
     string getHappyString(int n, int k) {
         ans.clear();
         temp.clear();
+        p=k;
 
         solve(n);
 
